@@ -1,7 +1,7 @@
 version: '2'
 services:
   pinpoint:
-    image: sqshq/pinpoint
+    build: sqshq/pinpoint
 
   rabbitmq:
     image: rabbitmq:3-management
