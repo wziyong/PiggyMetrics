@@ -1,8 +1,5 @@
 version: '2'
 services:
-  pinpoint:
-    build: sqshq/pinpoint
-
   rabbitmq:
     image: rabbitmq:3-management
     restart: always
