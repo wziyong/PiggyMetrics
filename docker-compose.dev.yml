@@ -1,5 +1,8 @@
 version: '2'
 services:
+  pinpoint:
+    build: pinpoint
+
   rabbitmq:
     ports:
       - 5672:5672
