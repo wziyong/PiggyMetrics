@@ -1,4 +1,4 @@
-FROM piggymetrics_pinpoint
+FROM sqshq/piggymetrics-pinpoint
 MAINTAINER Alexander Lukyanchikov <sqshq@sqshq.com>
 
 ADD ./target/auth-service.jar /app/
