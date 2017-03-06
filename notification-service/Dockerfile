@@ -1,9 +1,7 @@
-FROM piggymetrics_pinpoint
+FROM java:8-jre
 MAINTAINER Alexander Lukyanchikov <sqshq@sqshq.com>
 
 ADD ./target/notification-service.jar /app/
-
-CMD java -Xmx200m -javaagent:/pinpoint/pinpoint-bootstrap-1.6.0-SNAPSHOT.jar -Dpinpoint.agentId=110006 -Dpinpoint.applicationName=notification-service -jar /app/notification-service.jar >> /var/xx.log
-
+CMD ["java", "-Xmx200m", "-jar", "/app/notification-service.jar"]
 
 EXPOSE 8000

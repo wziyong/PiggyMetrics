@@ -1,9 +1,7 @@
-FROM piggymetrics_pinpoint
+FROM java:8-jre
 MAINTAINER Alexander Lukyanchikov <sqshq@sqshq.com>
 
 ADD ./target/config.jar /app/
-
-CMD java -Xmx200m -javaagent:/pinpoint/pinpoint-bootstrap-1.6.0-SNAPSHOT.jar -Dpinpoint.agentId=110003 -Dpinpoint.applicationName=config-service -jar /app/config-service.jar >> /var/xx.log
-
+CMD ["java", "-Xmx200m", "-jar", "/app/config.jar"]
 
 EXPOSE 8888
