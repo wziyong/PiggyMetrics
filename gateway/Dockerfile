@@ -1,4 +1,5 @@
-FROM java:8-jre
+FROM piggymetrics_pinpoint
+
 MAINTAINER Alexander Lukyanchikov <sqshq@sqshq.com>
 
 ADD ./target/gateway.jar /app/
