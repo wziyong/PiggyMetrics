@@ -5,9 +5,6 @@ ADD init.sh /init.sh
 ADD ./dump /
 
 RUN \
- chmod +x /init.sh && \
- apt-get update && apt-get dist-upgrade -y && \
- apt-get install psmisc -y -q && \
- apt-get autoremove -y && apt-get clean
+ chmod +x /init.sh
 
 ENTRYPOINT ["/init.sh"]
