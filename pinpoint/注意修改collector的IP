@@ -1,2 +1,2 @@
 1、修改IP
-2、删除JACKSON的jar包
+2、删除JACKSON的jar包 防止ObjectMapperJACKSON

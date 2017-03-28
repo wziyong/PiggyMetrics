@@ -50,12 +50,7 @@ public class AccountServiceImpl implements AccountService {
 
 		authClient.createUser(user);
 
-		Saving saving = new Saving();
-		saving.setAmount(new BigDecimal(0));
-		saving.setCurrency(Currency.getDefault());
-		saving.setInterest(new BigDecimal(0));
-		saving.setDeposit(false);
-		saving.setCapitalization(false);
+		Saving saving = getSaving();
 
 		Account account = new Account();
 		account.setName(user.getUsername());
@@ -66,7 +61,19 @@ public class AccountServiceImpl implements AccountService {
 
 		log.info("new account has been created: " + account.getName());
 
+		injectedMethod();
+
 		return account;
+	}
+
+	private Saving getSaving() {
+		Saving saving = new Saving();
+		saving.setAmount(new BigDecimal(0));
+		saving.setCurrency(Currency.getDefault());
+		saving.setInterest(new BigDecimal(0));
+		saving.setDeposit(false);
+		saving.setCapitalization(false);
+		return saving;
 	}
 
 	/**
@@ -88,5 +95,9 @@ public class AccountServiceImpl implements AccountService {
 		log.debug("account {} changes has been saved", name);
 
 		statisticsClient.updateStatistics(name, account);
+	}
+
+	public void injectedMethod() {
+
 	}
 }
