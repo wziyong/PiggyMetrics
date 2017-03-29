@@ -15,89 +15,97 @@ import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Random;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
-	private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-	private StatisticsServiceClient statisticsClient;
+    @Autowired
+    private StatisticsServiceClient statisticsClient;
 
-	@Autowired
-	private AuthServiceClient authClient;
+    @Autowired
+    private AuthServiceClient authClient;
 
-	@Autowired
-	private AccountRepository repository;
+    @Autowired
+    private AccountRepository repository;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Account findByName(String accountName) {
-		Assert.hasLength(accountName);
-		return repository.findByName(accountName);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Account findByName(String accountName) {
+        Assert.hasLength(accountName);
+        return repository.findByName(accountName);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Account create(User user) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Account create(User user) {
 
-		Account existing = repository.findByName(user.getUsername());
-		Assert.isNull(existing, "account already exists: " + user.getUsername());
+        Account existing = repository.findByName(user.getUsername());
+        Assert.isNull(existing, "account already exists: " + user.getUsername());
 
-		authClient.createUser(user);
+        authClient.createUser(user);
 
-		Saving saving = getSaving();
+        Saving saving = getSaving();
 
-		Account account = new Account();
-		account.setName(user.getUsername());
-		account.setLastSeen(new Date());
-		account.setSaving(saving);
+        Account account = new Account();
+        account.setName(user.getUsername());
+        account.setLastSeen(new Date());
+        account.setSaving(saving);
 
-		repository.save(account);
+        repository.save(account);
 
-		log.info("new account has been created: " + account.getName());
+        log.info("new account has been created: " + account.getName());
 
-		injectedMethod();
+        injectedMethod();
 
-		return account;
-	}
+        return account;
+    }
 
-	private Saving getSaving() {
-		Saving saving = new Saving();
-		saving.setAmount(new BigDecimal(0));
-		saving.setCurrency(Currency.getDefault());
-		saving.setInterest(new BigDecimal(0));
-		saving.setDeposit(false);
-		saving.setCapitalization(false);
-		return saving;
-	}
+    private Saving getSaving() {
+        Saving saving = new Saving();
+        saving.setAmount(new BigDecimal(0));
+        saving.setCurrency(Currency.getDefault());
+        saving.setInterest(new BigDecimal(0));
+        saving.setDeposit(false);
+        saving.setCapitalization(false);
+        return saving;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void saveChanges(String name, Account update) {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void saveChanges(String name, Account update) {
 
-		Account account = repository.findByName(name);
-		Assert.notNull(account, "can't find account with name " + name);
+        Account account = repository.findByName(name);
+        Assert.notNull(account, "can't find account with name " + name);
 
-		account.setIncomes(update.getIncomes());
-		account.setExpenses(update.getExpenses());
-		account.setSaving(update.getSaving());
-		account.setNote(update.getNote());
-		account.setLastSeen(new Date());
-		repository.save(account);
+        account.setIncomes(update.getIncomes());
+        account.setExpenses(update.getExpenses());
+        account.setSaving(update.getSaving());
+        account.setNote(update.getNote());
+        account.setLastSeen(new Date());
+        repository.save(account);
 
-		log.debug("account {} changes has been saved", name);
+        log.debug("account {} changes has been saved", name);
 
-		statisticsClient.updateStatistics(name, account);
-	}
+        statisticsClient.updateStatistics(name, account);
+    }
 
-	public void injectedMethod() {
-
-	}
+    public void injectedMethod() {
+        try {
+            int max = 5000;
+            int min = 10;
+            Random random = new Random();
+            int s = random.nextInt(max) % (max - min + 1) + min;
+            Thread.sleep(s);
+        } catch (Exception e) {
+        }
+    }
 }
